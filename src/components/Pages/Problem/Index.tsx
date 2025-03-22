@@ -295,8 +295,25 @@ export default function Problem() {
     if (editorRef.current && problemInfo) {
       const submissionbatch = [];
       const testcases = problemInfo?.testCases;
-      // @ts-ignore
-      const code = `${problemInfo.imports.find((s) => s.lang_id == language)?.code} \n ${editorRef.current.getValue()} \n ${problemInfo?.systemCode.find((s) => s.lang_id == language)?.code}`;
+      // Get each part of the code
+      const imports = problemInfo.imports.find((s) => s.lang_id == language)?.code || '';
+      const userCode = editorRef.current?.getValue() || '';
+      const systemCode = problemInfo?.systemCode.find((s) => s.lang_id == language)?.code || '';
+
+      // Properly format the code with proper line breaks and no extra indentation
+      let code;
+      if (language === 92) {
+        // Python
+        // Fix Python indentation by ensuring no extra spaces
+        code = imports + '\n' + userCode + '\n' + systemCode;
+      } else {
+        // For other languages, simple concatenation is fine
+        code = imports + '\n' + userCode + '\n' + systemCode;
+      }
+
+      console.log('submitt', code);
+
+      console.log('submitt', code);
       if (testcases?.length) {
         for (let index = 0; index < testcases?.length; index++) {
           if (testcases) {
