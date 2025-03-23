@@ -3,6 +3,7 @@ import Home from './Pages/Home';
 import Problem from './Pages/Problem/Index';
 import SignIn from './Pages/SignIn/Index';
 import SignUp from './Pages/SignUp/Index';
+import Profile from './Pages/Profile/Index';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,10 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: <SignUp />,
+  },
+  {
+    path: '/profile/:userId',
+    element: <Profile />,
   },
 ]);
 export default router;

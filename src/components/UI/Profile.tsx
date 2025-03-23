@@ -1,12 +1,13 @@
-import { Avatar, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography } from '@mui/material';
-import { useState } from 'react';
+import { Avatar, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, Typography, Button } from '@mui/material';
 import { useUserSlice } from '../../store/user';
 import EmailIcon from '@mui/icons-material/Email';
 import LogoutIcon from '@mui/icons-material/Logout';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useAuthSlice } from '../../store/authslice/auth';
 import { useMutation } from '@tanstack/react-query';
 import signOutAPI from '../../services/signOut';
 import { useNavigate } from 'react-router';
+import { useState } from 'react';
 
 export default function Profile() {
   const user = useUserSlice((state) => state.user);
@@ -17,61 +18,91 @@ export default function Profile() {
     mutationKey: ['sign-out'],
     mutationFn: signOutAPI,
   });
-  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  // Keep the menu functionality for the logout option
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
+
+  const handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+
+  const handleCloseMenu = () => {
     setAnchorEl(null);
   };
+
+  // New function to navigate to profile page
+  const goToProfile = () => {
+    if (user?._id) {
+      navigate(`/profile/${user._id}`);
+    }
+  };
+
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      await mutateAsync();
+      setUser(null);
+      signOut();
+      navigate('/signin');
+    } catch (err) {
+      console.error('Logout error:', err);
+    }
+    handleCloseMenu();
+  };
+
   return (
-    <>
-      <Tooltip title='Account settings'>
+    <div className='tw-flex tw-items-center'>
+      {/* Main avatar that navigates to profile */}
+      <Tooltip title='View profile'>
+        <IconButton onClick={goToProfile} size='small' sx={{ mr: 1 }}>
+          <Avatar
+            sx={{
+              width: 32,
+              height: 32,
+              bgcolor: 'primary.main',
+            }}
+          >
+            {user?.username?.[0]?.toUpperCase()}
+          </Avatar>
+        </IconButton>
+      </Tooltip>
+
+      {/* Settings menu button
+      <Tooltip title='Account options'>
         <IconButton
-          onClick={handleClick}
+          onClick={handleOpenMenu}
           size='small'
-          sx={{ ml: 2 }}
           aria-controls={open ? 'account-menu' : undefined}
           aria-haspopup='true'
           aria-expanded={open ? 'true' : undefined}
         >
-          <Avatar sx={{ width: 32, height: 32 }}>{user?.username[0]}</Avatar>
+          <AccountCircleIcon fontSize='small' />
         </IconButton>
-      </Tooltip>
-      <Menu
+      </Tooltip> */}
+
+      {/* Menu for logout */}
+      {/* <Menu
         anchorEl={anchorEl}
         id='account-menu'
         open={open}
-        onClose={handleClose}
-        onClick={handleClose}
+        onClose={handleCloseMenu}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
-          <EmailIcon />{' '}
+        <MenuItem onClick={handleCloseMenu}>
+          <EmailIcon fontSize='small' />
           <Typography marginLeft={1} variant='body2'>
             {user?.email}
           </Typography>
         </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <ListItemIcon
-            onClick={async () => {
-              await mutateAsync();
-              if (isError) {
-                console.log(error);
-                return;
-              }
-              setUser(null);
-              signOut();
-              navigate('/signin');
-            }}
-          >
-            <LogoutIcon />
+        <MenuItem onClick={handleLogout}>
+          <ListItemIcon>
+            <LogoutIcon fontSize='small' />
           </ListItemIcon>
           Logout
         </MenuItem>
-      </Menu>
-    </>
+      </Menu> */}
+    </div>
   );
 }

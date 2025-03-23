@@ -21,6 +21,7 @@ function Home() {
   useEffect(() => {
     if (data && isSuccess) {
       setUser(data.data);
+      console.log('User from home--', data.data);
     }
   }, [data, isSuccess]);
   if (isError) {

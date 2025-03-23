@@ -3,6 +3,7 @@ import { validateSessionRes } from '../utils/types';
 const validateSession = async () => {
   try {
     const response = await protectedapi.post<validateSessionRes>('/auth/session/validation');
+    console.log('Res from userr--', response.data);
     if (response.data.status === 'Failure') {
       throw new Error(response.data.error);
     }

@@ -75,6 +75,27 @@ export default function ProblemSubmissions({ data }: { data: problemsubmissionst
   return (
     <>
       <TableContainer className='tw-max-h-[70dvh] tw-overscroll-y-auto' component={Paper}>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25, { label: 'All', value: data?.length }]}
+          component='div'
+          count={table.getFilteredRowModel().rows.length}
+          rowsPerPage={pageSize}
+          page={pageIndex}
+          slotProps={{
+            select: {
+              inputProps: { 'aria-label': 'rows per page' },
+              native: true,
+            },
+          }}
+          onPageChange={(_, page) => {
+            table.setPageIndex(page);
+          }}
+          onRowsPerPageChange={(e) => {
+            const size = e.target.value ? Number(e.target.value) : 10;
+            table.setPageSize(size);
+          }}
+          ActionsComponent={TablePaginationActions}
+        />
         <Table sx={{ minWidth: 650 }} aria-label='simple table'>
           <TableHead>
             {table.getHeaderGroups().map((headerGroup) => (
@@ -106,7 +127,7 @@ export default function ProblemSubmissions({ data }: { data: problemsubmissionst
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
+      {/* <TablePagination
         rowsPerPageOptions={[5, 10, 25, { label: 'All', value: data?.length }]}
         component='div'
         count={table.getFilteredRowModel().rows.length}
@@ -126,7 +147,7 @@ export default function ProblemSubmissions({ data }: { data: problemsubmissionst
           table.setPageSize(size);
         }}
         ActionsComponent={TablePaginationActions}
-      />
+      /> */}
     </>
   );
 }

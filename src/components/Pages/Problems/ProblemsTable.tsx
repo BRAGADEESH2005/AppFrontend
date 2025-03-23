@@ -71,6 +71,27 @@ function ProblemsTable({
           </div>
         </div>
       </div>
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: data?.length }]}
+        component='div'
+        count={table.getFilteredRowModel().rows.length}
+        rowsPerPage={pageSize}
+        page={pageIndex}
+        slotProps={{
+          select: {
+            inputProps: { 'aria-label': 'Problems per page' },
+            native: true,
+          },
+        }}
+        onPageChange={(_, page) => {
+          table.setPageIndex(page);
+        }}
+        onRowsPerPageChange={(e) => {
+          const size = e.target.value ? Number(e.target.value) : 10;
+          table.setPageSize(size);
+        }}
+        ActionsComponent={TablePaginationActions}
+      />
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650, maxHeight: '75dvh', overflowY: 'auto' }} aria-label='simple table'>
           <TableHead>
@@ -123,27 +144,6 @@ function ProblemsTable({
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25, { label: 'All', value: data?.length }]}
-        component='div'
-        count={table.getFilteredRowModel().rows.length}
-        rowsPerPage={pageSize}
-        page={pageIndex}
-        slotProps={{
-          select: {
-            inputProps: { 'aria-label': 'Problems per page' },
-            native: true,
-          },
-        }}
-        onPageChange={(_, page) => {
-          table.setPageIndex(page);
-        }}
-        onRowsPerPageChange={(e) => {
-          const size = e.target.value ? Number(e.target.value) : 10;
-          table.setPageSize(size);
-        }}
-        ActionsComponent={TablePaginationActions}
-      />
     </Container>
   );
 }
