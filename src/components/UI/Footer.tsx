@@ -14,7 +14,7 @@ export default function Footer() {
       }}
     >
       <div className='tw-container-lg tw-flex tw-justify-evenly tw-mx-auto'>
-        <Box sx={{ paddingBlock: '5px', color: textColor }}>Copyright &copy; 2025 Leetcode</Box>
+        <Box sx={{ paddingBlock: '5px', color: textColor }}>Copyright &copy; 2025 CodeMap</Box>
         <Box sx={{ paddingBlock: '5px', color: textColor }}>Made with Love ❤</Box>
       </div>
     </footer>

@@ -197,6 +197,8 @@ const Profile: React.FC = () => {
   );
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number): void => {
+    // Reset page when changing tabs
+    setPage(0);
     setTabValue(newValue);
   };
 
@@ -284,12 +286,23 @@ const Profile: React.FC = () => {
     // Sort by date (newest first)
     filteredSubmissions.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
 
+    console.log('Tab value before filtering:', tabValue);
+    
     if (tabValue === 1) {
       // Only accepted solutions
-      filteredSubmissions = filteredSubmissions.filter((s) => s.status === 'Accepted');
+      filteredSubmissions = filteredSubmissions.filter((s) => {
+        console.log(`Submission ${s.submissionId} status:`, s.status);
+        return s.status === 'Accepted';
+      });
     }
 
-    return filteredSubmissions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    console.log('Filtered Submissions--', filteredSubmissions);
+    
+    // Slice for pagination
+    const paginatedSubmissions = filteredSubmissions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+    console.log('Final submissions to render:', paginatedSubmissions);
+    
+    return paginatedSubmissions;
   };
 
   return (
@@ -485,7 +498,7 @@ const Profile: React.FC = () => {
           onRowsPerPageChange={handleChangeRowsPerPage}
           rowsPerPageOptions={[5, 10, 25]}
         />
-        <TableContainer component={Paper} sx={{ mb: 2 }}>
+        <TableContainer component={Paper} sx={{ mb: 2 }} key={`submissions-table-${tabValue}`}>
           <Table sx={{ minWidth: 650 }} aria-label='submissions table'>
             <TableHead>
               <TableRow>
@@ -554,8 +567,6 @@ const Profile: React.FC = () => {
             </TableBody>
           </Table>
         </TableContainer>
-
-       
       </Box>
     </Layout>
   );
