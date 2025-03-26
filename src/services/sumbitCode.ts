@@ -21,7 +21,7 @@ async function submitCode(params: submitCodeArgs) {
     });
 
     if (response.data.status.id === 3) { // Assuming 3 is the ID for "Accepted" status
-      await axios.patch(`/api/users/${params.userId}/update-score`, {
+      await axios.patch(`/users/${params.userId}/update-score`, {
         difficulty: params.difficulty
       });
     }
