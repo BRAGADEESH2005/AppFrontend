@@ -3,28 +3,36 @@ import Home from './Pages/Home';
 import Problem from './Pages/Problem/Index';
 import SignIn from './Pages/SignIn/Index';
 import SignUp from './Pages/SignUp/Index';
-import Profile from './Pages/Profile/Index';
+import Leaderboard from './Pages/Leaderboard/Leaderboard';  // Update import path
+import Layout from './Layout';  // Make sure this path is correct
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <Home />,
-  },
-  {
-    path: '/problems/:problemname',
-    element: <Problem />,
-  },
-  {
-    path: '/signin',
-    element: <SignIn />,
-  },
-  {
-    path: '/signup',
-    element: <SignUp />,
-  },
-  {
-    path: '/profile/:userId',
-    element: <Profile />,
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <Home />,
+      },
+      {
+        path: 'problems/:problemname',
+        element: <Problem />,
+      },
+      {
+        path: 'signin',
+        element: <SignIn />,
+      },
+      {
+        path: 'signup',
+        element: <SignUp />,
+      },
+      {
+        path: 'leaderboard',
+        element: <Leaderboard />,
+      },
+    ],
   },
 ]);
+
 export default router;
