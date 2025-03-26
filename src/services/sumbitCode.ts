@@ -19,12 +19,8 @@ async function submitCode(params: submitCodeArgs) {
       stdin: params.input.replace('\\n', '\n'),
       expected_output: params.expected_output,
     });
+    console.log('Response from judge0:', response.data);
 
-    if (response.data.status.id === 3) { // Assuming 3 is the ID for "Accepted" status
-      await axios.patch(`/users/${params.userId}/update-score`, {
-        difficulty: params.difficulty
-      });
-    }
 
     return response;
   } catch (error) {

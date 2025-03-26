@@ -2,6 +2,7 @@ import { useNavigate, useParams } from 'react-router';
 import { Monaco } from '@monaco-editor/react';
 import * as monaco from '@monaco-editor/react';
 import { useMutation } from '@tanstack/react-query';
+import axios from '../../../services/axios';
 import getProblem from '../../../services/getProblem';
 import { Alert, Backdrop, CircularProgress, IconButton, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
@@ -39,7 +40,7 @@ import useFullScreen from '../../../hooks/useFullScreen';
 
 export default function Problem() {
   const { problemname } = useParams();
-  const editorRef = useRef(null);
+  const editorRef = useRef<any>(null);
   const user = useUserSlice((state) => state.user);
   const setUser = useUserSlice((state) => state.setUser);
   const { colorMode } = usethemeUtils();
@@ -310,6 +311,8 @@ export default function Problem() {
         // For other languages, simple concatenation is fine
         code = imports + '\n' + userCode + '\n' + systemCode;
       }
+      console.log('usercode', userCode);
+      console.log('please work \n\n', code);
 
       console.log('submitt', code);
 
@@ -343,6 +346,14 @@ export default function Problem() {
         setSuccessCount(successcount);
         if (status) {
           setProblemSubmissionStatus('Accepted');
+          try {
+            await axios.patch(`http://localhost:8080/users/${user?._id}/update-score`, {
+              difficulty: problemInfo?.difficulty,
+            });
+            
+          } catch (error) {
+            console.error('Failed to update user score:', error);
+          }
         } else {
           setProblemSubmissionStatus('Rejected');
         }
