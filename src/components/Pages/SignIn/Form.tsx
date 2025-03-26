@@ -8,6 +8,8 @@ import {
   InputLabel,
   OutlinedInput,
   TextField,
+  Typography,
+  Stack,
 } from '@mui/material';
 import { useMutation } from '@tanstack/react-query';
 import signIn from '../../../services/signIn';
@@ -71,33 +73,30 @@ export default function LoginForm() {
   };
   const colorStyles = useMemo(() => ({ color: colorMode === 'dark' ? 'common.white' : 'common.black' }), [colorMode]);
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-      <FormControl variant='outlined' size='small'>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, maxWidth: 400, mx: 'auto', p: 3, borderRadius: 2, bgcolor: 'background.paper', boxShadow: 3 }}>
+      <Typography variant='h5' align='center' fontWeight='bold' sx={{ mb: 2 }}>
+        Sign In
+      </Typography>
+      <FormControl variant='outlined' fullWidth>
         <TextField
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          id='standard-basic'
+          id='email'
           type='email'
           label='E-mail'
           variant='outlined'
-          size='small'
-          slotProps={{
-            inputLabel: {
-              color: colorStyles.color,
-            },
-          }}
+          size='medium'
+          InputLabelProps={{ style: { color: colorStyles.color } }}
         />
       </FormControl>
-      <FormControl variant='outlined' size='small'>
-        <InputLabel focused={false} htmlFor='outlined-adornment-password'>
-          Password
-        </InputLabel>
+      <FormControl variant='outlined' fullWidth>
+        <InputLabel htmlFor='outlined-adornment-password'>Password</InputLabel>
         <OutlinedInput
           id='outlined-adornment-password'
           type={showPassword ? 'text' : 'password'}
           onChange={(e) => setPassword(e.target.value)}
           value={password}
-          size='small'
+          size='medium'
           endAdornment={
             <InputAdornment position='end'>
               <IconButton
@@ -113,15 +112,15 @@ export default function LoginForm() {
           label='Password'
         />
       </FormControl>
-      <div className='tw-flex tw-flex-col tw-items-center tw-gap-0'>
-        <Button color='warning' variant='contained' onClick={onClickHandler}>
+      <Stack spacing={1} alignItems='center' sx={{ mt: 2 }}>
+        <Button color='warning' variant='contained' fullWidth onClick={onClickHandler}>
           Sign In
         </Button>
-        <div>Or</div>
-        <Button color='warning' variant='contained' onClick={signInAsGuest}>
+        <Typography variant='body2' color='textSecondary'>Or</Typography>
+        <Button color='warning' variant='contained' fullWidth onClick={signInAsGuest}>
           Sign In as Guest
         </Button>
-      </div>
+      </Stack>
     </Box>
   );
 }
