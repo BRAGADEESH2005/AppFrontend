@@ -5,6 +5,7 @@ import SignIn from './Pages/SignIn/Index';
 import SignUp from './Pages/SignUp/Index';
 import Leaderboard from './Pages/Leaderboard/Leaderboard';  // Update import path
 import Layout from './Layout';  // Make sure this path is correct
+import Profile from './Pages/Profile/Index';  // Update import path
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
         path: 'leaderboard',
         element: <Leaderboard />,
       },
+      {
+        path: 'profile/:userId',
+        element: <Profile />,
+      }
     ],
   },
 ]);
