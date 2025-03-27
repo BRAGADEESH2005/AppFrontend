@@ -1,3 +1,4 @@
+
 import { flexRender } from '@tanstack/react-table';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -15,6 +16,7 @@ import { Container, IconButton, SelectChangeEvent } from '@mui/material';
 import { Table as TableType } from '@tanstack/react-table';
 import DifficultyFilter from './DifficultyFilter';
 import StatusFilter from './StatusFilter';
+import ProblemTypeFilter from './ProblemTypeFilter';
 import ProblemSearch from './ProblemSearch';
 import RestartAltOutlinedIcon from '@mui/icons-material/RestartAltOutlined';
 import { useEffect } from 'react';
@@ -25,7 +27,9 @@ function ProblemsTable({
   handleDifficultChange,
   difficultyFilter,
   statusFilter,
+  problemTypeFilter,
   handleStatusChange,
+  handleProblemTypeChange,
   searchQuery,
   handleQueryChange,
   clear,
@@ -36,8 +40,10 @@ function ProblemsTable({
   handleDifficultChange: (event: SelectChangeEvent) => void;
   difficultyFilter: string;
   statusFilter: string;
+  problemTypeFilter: string;
   searchQuery: string;
   handleStatusChange: (event: SelectChangeEvent) => void;
+  handleProblemTypeChange: (event: SelectChangeEvent) => void;
   handleQueryChange: (queryvalue: string) => void;
   clear: () => void;
   reset: () => void;
@@ -61,6 +67,7 @@ function ProblemsTable({
         <div className='tw-flex'>
           <DifficultyFilter value={difficultyFilter} handleChange={handleDifficultChange}></DifficultyFilter>
           <StatusFilter value={statusFilter} handleChange={handleStatusChange}></StatusFilter>
+          <ProblemTypeFilter value={problemTypeFilter} handleChange={handleProblemTypeChange}></ProblemTypeFilter>
         </div>
         <div className='tw-flex'>
           <ProblemSearch clear={clear} queryvalue={searchQuery} onChangeHandler={handleQueryChange} />

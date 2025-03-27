@@ -27,6 +27,7 @@ export default function ProblemsSet() {
   const [open, setOpen] = useState<boolean>(true);
   const [difficultyFilter, setDifficultyFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [problemTypeFilter, setProblemTypeFilter] = useState<string>('all'); // Add this state
   const [searchQuery, setSearchQuery] = useState<string>('');
   const { isError, isLoading, error } = useAuthContext();
   const problems = useProblemSlice((state) => state.problems);
@@ -91,6 +92,14 @@ export default function ProblemsSet() {
         },
         filterFn: 'difficultyFilter' as any,
       }),
+      // Add a new column for problem type
+      columnHelper.accessor((row) => row.problemType || 'other', {
+        id: 'ProblemType',
+        cell: (info) => {
+          return <div>{capitalize(info.getValue().replace(/-/g, ' '))}</div>;
+        },
+        filterFn: 'problemTypeFilter' as any,
+      }),
     ],
     [user]
   );
@@ -108,7 +117,7 @@ export default function ProblemsSet() {
     filterFns: {
       difficultyFilter: (row, columnId, filterValue) => {
         if (filterValue === 'all') {
-          return row;
+          return true;
         }
         const column = columnId.toLowerCase();
         const value = filterValue ? row.original[column] === filterValue : row.original[column];
@@ -137,6 +146,14 @@ export default function ProblemsSet() {
         }
         return true;
       },
+      // Add a filter function for problem type
+      problemTypeFilter: (row, columnId, filterValue) => {
+        if (filterValue === 'all') {
+          return true;
+        }
+        const problemType = row.original.problemType || 'other';
+        return problemType === filterValue;
+      },
     },
   });
 
@@ -145,9 +162,16 @@ export default function ProblemsSet() {
     setDifficultyFilter(event.target.value);
     table.getColumn('Difficulty')?.setFilterValue(event.target.value);
   };
+  
   const handleStatusChange = (event: SelectChangeEvent) => {
     setStatusFilter(event.target.value);
     table.getColumn('Status')?.setFilterValue(event.target.value);
+  };
+  
+  // Add handler for problem type filter
+  const handleProblemTypeChange = (event: SelectChangeEvent) => {
+    setProblemTypeFilter(event.target.value);
+    table.getColumn('ProblemType')?.setFilterValue(event.target.value);
   };
 
   const handleQueryChange = (queryvalue: string) => {
@@ -157,6 +181,7 @@ export default function ProblemsSet() {
   useEffect(() => {
     table.getColumn('Title')?.setFilterValue(debouncedSearchQuery);
   }, [debouncedSearchQuery]);
+  
   // Add this after your table declaration
   useEffect(() => {
     console.log('problems123455---', problems);
@@ -200,6 +225,8 @@ export default function ProblemsSet() {
         handleStatusChange={handleStatusChange}
         difficultyFilter={difficultyFilter}
         statusFilter={statusFilter}
+        problemTypeFilter={problemTypeFilter}
+        handleProblemTypeChange={handleProblemTypeChange}
         handleDifficultChange={handleDifficultyChange}
         table={table}
         data={problems}
@@ -212,8 +239,10 @@ export default function ProblemsSet() {
           setSearchQuery('');
           setStatusFilter('all');
           setDifficultyFilter('all');
+          setProblemTypeFilter('all');
           table.getColumn('Difficulty')?.setFilterValue('all');
           table.getColumn('Status')?.setFilterValue('all');
+          table.getColumn('ProblemType')?.setFilterValue('all');
         }}
       />
     </>
