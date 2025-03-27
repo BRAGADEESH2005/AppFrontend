@@ -287,7 +287,7 @@ const Profile: React.FC = () => {
     filteredSubmissions.sort((a, b) => new Date(b.submittedAt).getTime() - new Date(a.submittedAt).getTime());
 
     console.log('Tab value before filtering:', tabValue);
-    
+
     if (tabValue === 1) {
       // Only accepted solutions
       filteredSubmissions = filteredSubmissions.filter((s) => {
@@ -297,11 +297,11 @@ const Profile: React.FC = () => {
     }
 
     console.log('Filtered Submissions--', filteredSubmissions);
-    
+
     // Slice for pagination
     const paginatedSubmissions = filteredSubmissions.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     console.log('Final submissions to render:', paginatedSubmissions);
-    
+
     return paginatedSubmissions;
   };
 
@@ -523,7 +523,7 @@ const Profile: React.FC = () => {
                           color: 'primary.main',
                           cursor: 'pointer',
                         }}
-                        onClick={() => navigate(`/problem/${submission.problemId}`)}
+                        onClick={() => navigate(`/problems/${submission.problemId}`)}
                       >
                         {problem.title || 'Unknown Problem'}
                       </Typography>
